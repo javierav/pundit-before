@@ -38,6 +38,10 @@ Metrics/ModuleLength:
     - hash
     - heredoc
 
+Naming/FileName:
+  Exclude:
+    - "**/lib/pundit-before.rb"
+
 Style/Documentation:
   Enabled: false
 

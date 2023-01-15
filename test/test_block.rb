@@ -3,31 +3,27 @@
 require "test_helper"
 
 class TestBlock < Minitest::Test
-  def test_not_admin_and_not_owner
+  class BlockPolicy < BasePolicy
+    before do
+      deny! unless user.admin?
+    end
+
+    def edit?
+      true
+    end
+  end
+
+  def test_admin
+    user = User.new(1)
+    policy = BlockPolicy.new(user)
+
+    assert_predicate policy, :edit?
+  end
+
+  def test_user
     user = User.new(2)
-    record = Record.new(1, 3)
+    policy = BlockPolicy.new(user)
 
-    refute_predicate BeforeWithBlockPolicy.new(user, record), :edit?
-  end
-
-  def test_not_admin_and_owner
-    user = User.new(3)
-    record = Record.new(1, 3)
-
-    refute_predicate BeforeWithBlockPolicy.new(user, record), :edit?
-  end
-
-  def test_admin_and_not_owner
-    user = User.new(1)
-    record = Record.new(1, 2)
-
-    refute_predicate BeforeWithBlockPolicy.new(user, record), :edit?
-  end
-
-  def test_admin_and_owner
-    user = User.new(1)
-    record = Record.new(1, 1)
-
-    assert_predicate BeforeWithBlockPolicy.new(user, record), :edit?
+    refute_predicate policy, :edit?
   end
 end

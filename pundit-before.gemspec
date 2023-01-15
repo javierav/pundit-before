@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   #
   spec.name = "pundit-before"
   spec.version = Pundit::Before.version
-  spec.summary = "Add before hook to pundit"
+  spec.summary = "Adds before hook to pundit policy classes"
   spec.homepage = "https://github.com/javierav/pundit-before"
   spec.license = "MIT"
 

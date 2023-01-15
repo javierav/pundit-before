@@ -2,11 +2,15 @@
 
 require "test_helper"
 
-class TestMethod < Minitest::Test
-  class MethodPolicy < BasePolicy
-    before :check_admin
+class TestExcept < Minitest::Test
+  class ExceptPolicy < BasePolicy
+    before :check_admin, except: :destroy?
 
     def edit?
+      false
+    end
+
+    def destroy?
       false
     end
 
@@ -19,15 +23,17 @@ class TestMethod < Minitest::Test
 
   def test_admin
     user = User.new(1)
-    policy = MethodPolicy.new(user)
+    policy = ExceptPolicy.new(user)
 
     assert_predicate policy, :edit?
+    refute_predicate policy, :destroy?
   end
 
   def test_user
     user = User.new(2)
-    policy = MethodPolicy.new(user)
+    policy = ExceptPolicy.new(user)
 
     refute_predicate policy, :edit?
+    refute_predicate policy, :destroy?
   end
 end

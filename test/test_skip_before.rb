@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class TestInheritance < Minitest::Test
+class TestSkipBefore < Minitest::Test
   class MethodPolicy < BasePolicy
     before :check_admin
 
@@ -18,27 +18,14 @@ class TestInheritance < Minitest::Test
   end
 
   class InheritedPolicy < MethodPolicy
-    before :check_root
-
-    private
-
-    def check_root
-      allow! if user.root?
-    end
-  end
-
-  def test_root
-    user = User.new(0)
-    policy = InheritedPolicy.new(user)
-
-    assert_predicate policy, :edit?
+    skip_before :check_admin
   end
 
   def test_admin
     user = User.new(1)
     policy = InheritedPolicy.new(user)
 
-    assert_predicate policy, :edit?
+    refute_predicate policy, :edit?
   end
 
   def test_user
